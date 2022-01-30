@@ -21,8 +21,7 @@ def test_create_przedmiot_success(_przedmiot, _nauczyciel):
 def test_create_przedmiot_failure(_placholder,_przedmiotErr, _nauczycielErr, _Err):
     instance = Przedmiot(_placholder, "Jan Kowalski")
     assert_that(Przedmiot.create_przedmiot).raises(_Err).when_called_with(_przedmiotErr, _nauczycielErr)
-    
-    
+
 class Test_przedmiot_class(unittest.TestCase):
     def setUp(self)-> None:
         Przedmiot.przedmiot_list=[]
@@ -41,9 +40,27 @@ class Test_przedmiot_class(unittest.TestCase):
          
     def test_check_if_przedmiot_unique_epic_fail(self):
         with self.assertRaises(ValueError):
-            self.instance_2._check_if_przedmiot_unique("Polski")
+            self.instance_2._check_if_przedmiot_unique("Polski")  
     
-         
+# @params(('', 'Panda 3'),, )
+    def test_edit_przedmiot_nauczyciel(self):
+        self.instance_1.edit_przedmiot('','Panda 3')
+        assert_that(self.instance_1.nazwa).is_equal_to("Matematyka")  
+        assert_that(self.instance_1.nauczyciel).is_equal_to("Panda 3")
+    
+    def test_edit_przedmiot_nazwa(self):
+        self.instance_1.edit_przedmiot("Nowy Test", '')
+        assert_that(self.instance_1.nazwa).is_equal_to("Nowy Test")  
+        assert_that(self.instance_1.nauczyciel).is_equal_to("Jan Kowalski")
+    
+    def test_edit_przedmiot_nazwa_and_nauczyciel(self):
+        self.instance_1.edit_przedmiot("Teraz", "Oba")
+        assert_that(self.instance_1.nazwa).is_equal_to("Teraz")  
+        assert_that(self.instance_1.nauczyciel).is_equal_to("Oba")
+
+    def test_edit_przedmiot_failure(self):
+        assert_that(self.instance_1.edit_przedmiot).raises(ValueError).when_called_with("Polski",'')
+        
     def tearDown(self):
         self.instance_1.nazwa = None
         self.instance_1.nauczyciel = None

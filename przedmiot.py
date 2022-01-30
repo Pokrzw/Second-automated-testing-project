@@ -15,7 +15,7 @@ class Przedmiot():
     @classmethod    
     def create_przedmiot(cls, nazwa, nauczyciel):
         if nazwa in cls.przedmiot_list:
-            raise ValueError("Ten przedmiot juz jest na liscie")
+            raise ValueError("Nie mozna dodac - ten przedmiot juz jest na liscie")
         if nazwa == '' and nauczyciel== '':
             raise ValueError("Nie wprowadzono ani nauczyciela ani przedmiotu")
         if nazwa == '':
@@ -24,3 +24,18 @@ class Przedmiot():
             raise EmptyTeacherField
         else:
             return cls(nazwa, nauczyciel)
+    
+    def edit_przedmiot(self, nazwa, nauczyciel):
+        if nazwa== '':
+            new_nazwa = self.nazwa
+        if nazwa in Przedmiot.przedmiot_list:
+            raise ValueError("Nie mozna edytowac - ten przedmiot juz jest na liscie")
+        elif nazwa!='' and nazwa not in Przedmiot.przedmiot_list:
+            new_nazwa = nazwa
+        if nauczyciel== '':
+            new_nauczyciel = self.nauczyciel
+        else:
+            new_nauczyciel = nauczyciel
+        self.nazwa = new_nazwa
+        self.nauczyciel = new_nauczyciel
+
