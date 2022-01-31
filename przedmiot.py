@@ -1,6 +1,5 @@
 from errors import EmptyNameField, EmptyTeacherField, NotUniquePrzedmiot
-import gc
-from main import garbageCollector
+
 
 class Przedmiot():
     przedmiot_list = []
