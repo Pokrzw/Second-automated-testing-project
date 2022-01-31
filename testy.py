@@ -27,6 +27,8 @@ class Test_przedmiot_class(unittest.TestCase):
         Przedmiot.przedmiot_list=[]
         self.instance_1 = Przedmiot("Matematyka", "Jan Kowalski")
         self.instance_2 = Przedmiot("Polski", "Roman Nowak")
+        Przedmiot.create_przedmiot("Astronomia","Sandzaja")
+        Przedmiot.create_przedmiot("Szachy","Korwin")
               
     def test_przedmiot_init(self):
         self.assertEqual(self.instance_1.nazwa, "Matematyka")
@@ -36,30 +38,33 @@ class Test_przedmiot_class(unittest.TestCase):
     
     def test_check_if_przedmiot_unique_success_przedmiot_list(self):
         self.instance_2._check_if_przedmiot_unique("Chemia")
-        assert_that(self.instance_2.przedmiot_list).is_equal_to(['Matematyka','Polski', 'Chemia'])
+        assert_that(self.instance_2.przedmiot_list).is_equal_to(['Matematyka', 'Polski', 'Astronomia', 'Szachy', 'Chemia'])
          
     def test_check_if_przedmiot_unique_epic_fail(self):
         with self.assertRaises(ValueError):
             self.instance_2._check_if_przedmiot_unique("Polski")  
     
-# @params(('', 'Panda 3'),, )
     def test_edit_przedmiot_nauczyciel(self):
-        self.instance_1.edit_przedmiot('','Panda 3')
-        assert_that(self.instance_1.nazwa).is_equal_to("Matematyka")  
-        assert_that(self.instance_1.nauczyciel).is_equal_to("Panda 3")
+        Przedmiot.edit_przedmiot("Szachy","",'Panda 3')
+        assert_that(Przedmiot.get_instance("Szachy").nauczyciel).is_equal_to("Panda 3")
     
     def test_edit_przedmiot_nazwa(self):
-        self.instance_1.edit_przedmiot("Nowy Test", '')
-        assert_that(self.instance_1.nazwa).is_equal_to("Nowy Test")  
-        assert_that(self.instance_1.nauczyciel).is_equal_to("Jan Kowalski")
+        Przedmiot.edit_przedmiot("Szachy","Nowa nazwa", '')
+        assert_that(Przedmiot.get_przedmiots()).does_not_contain("Szachy, Korwin")  
+        assert_that(Przedmiot.get_przedmiots()).contains("Nowa nazwa, Korwin")
     
     def test_edit_przedmiot_nazwa_and_nauczyciel(self):
-        self.instance_1.edit_przedmiot("Teraz", "Oba")
-        assert_that(self.instance_1.nazwa).is_equal_to("Teraz")  
-        assert_that(self.instance_1.nauczyciel).is_equal_to("Oba")
+        Przedmiot.edit_przedmiot("Szachy","Teraz", "Oba")
+        assert_that(Przedmiot.get_przedmiots()).does_not_contain("Szachy, Korwin") 
+        assert_that(Przedmiot.get_przedmiots()).contains("Teraz, Oba")
 
     def test_edit_przedmiot_failure(self):
-        assert_that(self.instance_1.edit_przedmiot).raises(ValueError).when_called_with("Polski",'')
+        assert_that(Przedmiot.delete_przedmiot).raises(ValueError).when_called_with("Muzyka")
+    
+    def test_delete_przedmiot_failure(self):
+        Przedmiot.delete_przedmiot("Szachy")
+        assert_that(Przedmiot.edit_przedmiot).raises(ValueError).when_called_with("Szachy",'','')
+        
         
     def tearDown(self):
         self.instance_1.nazwa = None
@@ -69,6 +74,3 @@ class Test_przedmiot_class(unittest.TestCase):
         Przedmiot.przedmiot_list = []
         
         
-# if __name__ == '__main__':
-#     unittest.main()
-    
