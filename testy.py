@@ -1,11 +1,12 @@
 import unittest
+from unittest import mock
 from unittest.mock import Mock, patch
 from nose2.tools import params
 from main import get_data
 from przedmiot import Przedmiot
 from assertpy import assert_that
 from errors import EmptyNameField, EmptyTeacherField, NotUniquePrzedmiot
-
+from uczen import Uczen
 @params((200, 'Dziala'),(400, -1))
 def test_get_data( _status, _return):
     with patch('requests.get') as mock_get:
@@ -144,12 +145,69 @@ class Test_przedmiot_class_GET_INSTANCE(unittest.TestCase):
         Przedmiot.delete_przedmiot("Polski")
         
         
-class Test_uczen_class_INIT(unittest.TestCase):
-    def setUp(self):
-        pass
-        
-    def tearDown(self):
-        pass
+class Test_uczen_class_CREATE_UCZEN(unittest.TestCase):
+    def test_create_success_oneGrade_oneUwaga(self):
+        assert_that(Uczen.create_uczen('Test','User',6,"Uwaga")).is_instance_of(Uczen)
+   
+    def test_create_success_noGrade_noUwaga(self):
+        assert_that(Uczen.create_uczen('Test','User','','')).is_instance_of(Uczen)    
+   
+    def test_create_success_multipleGrade_multipleUwaga(self):
+        assert_that(Uczen.create_uczen('Test','User',[6,2],['Lorem','Ipsum'])).is_instance_of(Uczen)    
     
+    def test_create_failure(self):
+        assert_that(Uczen.create_uczen).raises(ValueError).when_called_with("","",'','')
 
 
+class Test_uczen_class_GET_WSZYSCY_UCZNIOWIE(unittest.TestCase):
+    def test_get_wszyscy(self):
+        mock_instance = Mock(name = 'instance_list',  id= 0, imie= "Test", nazwisko="User",oceny= 3,uwagi= "Brak uwag")
+        mock_instance_list = [mock_instance]
+        Uczen.instance_list = mock_instance_list     
+        assert_that(Uczen.get_wszyscy_uczniowie()).is_equal_to(['id:0, imie:Test, nazwisko:User, oceny:3, uwagi:Brak uwag'])
+
+class Test_uczen_class_EDIT_UCZEN(unittest.TestCase):
+    def setUp(self)-> None:
+        mock_instance = Mock(name = 'instance_list',  id= 0, imie= "Test", nazwisko="User",oceny= 3,uwagi= "Brak uwag")
+        mock_instance_list = [mock_instance]
+        Uczen.instance_list = mock_instance_list  
+        
+    def test_edit_uczen_success_name_and_surname(self):
+        assert_that(Uczen.edit_uczen(0,"lorem","ipsum")).is_equal_to('Nowe dane: imie:lorem, nazwisko:ipsum')
+
+    def test_edit_uczen_success_surname(self):
+        assert_that(Uczen.edit_uczen(0,"","ipsum")).is_equal_to('Nowe dane: imie:Test, nazwisko:ipsum')
+    
+    def test_edit_uczen_success_none(self):
+        assert_that(Uczen.edit_uczen(0,"","")).is_equal_to('Nowe dane: imie:Test, nazwisko:User')
+           
+    def test_edit_uczen_failure(self):
+        assert_that(Uczen.edit_uczen).raises(ValueError).when_called_with(1,"lorem","ipsum")
+    
+    
+    def tearDown(self):
+        Uczen.instance_list = []
+        
+class Test_uczen_class_GET_INSTANCE(unittest.TestCase):
+    def setUp(self):
+        mock_instance = Mock(name = 'instance_list', id=0, side_effect=ValueError)
+        Uczen.instance_list = [mock_instance]
+        
+    def test_get_instance_success(self):
+        mock_instance = Mock(name = 'instance_list', id=0, side_effect=ValueError)
+        Uczen.instance_list = [mock_instance]
+        assert_that(Uczen.get_instance(0)).is_equal_to(mock_instance)
+
+    def test_get_instance_failure(self):
+        assert_that(Uczen.get_instance(1)).is_equal_to('Nie ma instance o podanym id')
+
+class Test_uczen_class_DELETE_USER(unittest.TestCase):
+    
+    def test_delete_uczen_success(self):
+        mock_instance = Mock(name = 'instance_list', id=0)
+        Uczen.instance_list = [mock_instance]
+        assert_that(Uczen.delete_uczen(0)).is_equal_to("Usunięto ucznia")
+
+    def test_delete_uczen_failure(self):
+        assert_that(Uczen.delete_uczen(100)).is_equal_to("Nie ma instance o podanym id")
+        
