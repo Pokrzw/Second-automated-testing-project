@@ -1,10 +1,11 @@
+from pyparsing import PrecededBy
 from errors import EmptyNameField, EmptyTeacherField, NotUniquePrzedmiot
 from przedmiot import Przedmiot
 
 class Uczen():
     instance_list = []
     id = 0
-    
+    id_oceny = 0
     def __init__(self, imie, nazwisko, oceny, uwagi):
             self.imie = imie
             self.nazwisko = nazwisko
@@ -61,13 +62,22 @@ class Uczen():
                 return "Usunięto ucznia"            
         else:
             return uczen_do_usuniecia
+        
+    @classmethod
+    def get_oceny(cls, _id):
+        uczen = Uczen.get_instance(_id)
+        if type(uczen)!=str:
+            return uczen.oceny
+        else:
+            return uczen       
     
     @classmethod
     def get_uwagi(cls, _id):
-        for uczen in Uczen.instance_list:
-            if uczen.id == _id:
-                return uczen.uwagi
-        raise ValueError("Nie ma ucznia o podanym id - nie mozna wyswietlic uwag")            
+        uczen = Uczen.get_instance(_id)
+        if type(uczen)!=str:
+            return uczen.uwagi
+        else:
+            return uczen            
     
     @classmethod
     def get_instance(cls, _id):
@@ -83,4 +93,28 @@ class Uczen():
             klasa.append(f"id:{item.id}, imie:{item.imie}, nazwisko:{item.nazwisko}, oceny:{item.oceny}, uwagi:{item.uwagi}")
         return klasa
     
-    
+    @staticmethod
+    def testInput(a,b,c):
+        if "" in (a, b, c):
+            raise ValueError("Jeden z atrybutów jest pusty")
+        if b not in Przedmiot.przedmiot_list:
+            raise ValueError("Nie ma takiego przedmiotu - nie mozna wystawic oceny")           
+        if c<1 or c>6:
+            raise ValueError("Ocena nie moze byc wieksza od 6 lub mniejsza od 1")   
+        return 1             
+      
+    @staticmethod
+    def dodaj_ocene(id_ucznia, przedmiot, wartosc):
+        Uczen.testInput(id_ucznia, przedmiot, wartosc)
+        uczen_do_oceny = Uczen.get_instance(id_ucznia)       
+        id_oceny = Uczen.id_oceny
+        nauczyciel = Przedmiot.get_nauczyciel(przedmiot)
+        new_ocena = {
+                    'id_oceny': id_oceny,
+                    'przedmiot': przedmiot,
+                    'nauczyciel': nauczyciel,
+                    'wartosc': wartosc
+                }
+        Uczen.id_oceny += 1
+        uczen_do_oceny.oceny.append(new_ocena)
+        return new_ocena

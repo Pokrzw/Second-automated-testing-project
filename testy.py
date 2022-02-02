@@ -112,7 +112,17 @@ class Test_przedmiot_class_DELETE(unittest.TestCase):
         self.instance_2.nazwa = None
         self.instance_2.nauczyciel = None
         Przedmiot.przedmiot_list = []
-
+        
+class Test_przedmiot_class_GET_NAUCZYCIEL(unittest.TestCase):
+    def test_get_nauczyciel_failure(self):
+        Przedmiot.przedmiot_list = ['Angielski']
+        assert_that(Przedmiot.get_nauczyciel).raises(ValueError).when_called_with('Przyroda')
+        
+    def test_get_nauczyciel_success(self):
+        Przedmiot.przedmiot_list = ['Angielski']
+        mock_instance_list = Mock(nazwa="Angielski", nauczyciel="Jan Kowalski")
+        Przedmiot.instance_list = [mock_instance_list]
+        assert_that(Przedmiot.get_nauczyciel("Angielski")).is_equal_to('Jan Kowalski')
 class Test_przedmiot_class_GET_PRZEDMIOTS(unittest.TestCase):
     def setUp(self)-> None:
         Przedmiot.przedmiot_list = []
@@ -201,8 +211,7 @@ class Test_uczen_class_GET_INSTANCE(unittest.TestCase):
     def test_get_instance_failure(self):
         assert_that(Uczen.get_instance(1)).is_equal_to('Nie ma instance o podanym id')
 
-class Test_uczen_class_DELETE_USER(unittest.TestCase):
-    
+class Test_uczen_class_DELETE_UCZEN(unittest.TestCase):    
     def test_delete_uczen_success(self):
         mock_instance = Mock(name = 'instance_list', id=0)
         Uczen.instance_list = [mock_instance]
@@ -211,3 +220,57 @@ class Test_uczen_class_DELETE_USER(unittest.TestCase):
     def test_delete_uczen_failure(self):
         assert_that(Uczen.delete_uczen(100)).is_equal_to("Nie ma instance o podanym id")
         
+class Test_uczen_class_GET_UWAGI(unittest.TestCase):
+    @patch('uczen.Uczen.get_instance')
+    def test_get_uwagi_success(self, get_instance_mock):
+        get_instance_mock.return_value.uwagi = "Przykładowa uwaga"
+        assert_that(Uczen.get_uwagi(0)).is_equal_to("Przykładowa uwaga")
+    
+    @patch('uczen.Uczen.get_instance')
+    def test_get_uwagi_failure(self, get_instance_mock):
+        get_instance_mock.return_value = "Nieistniejace instance"
+        assert_that(Uczen.get_uwagi(0)).is_equal_to("Nieistniejace instance")
+        
+class Test_uczen_class_GET_OCENY(unittest.TestCase):
+    @patch('uczen.Uczen.get_instance')
+    def test_get_oceny_success(self, get_instance_mock):
+        get_instance_mock.return_value.oceny = 6
+        assert_that(Uczen.get_oceny(0)).is_equal_to(6)
+    
+    @patch('uczen.Uczen.get_instance')
+    def test_get_oceny_failure(self, get_instance_mock):
+        get_instance_mock.return_value = "Nieistniejace instance"
+        assert_that(Uczen.get_oceny(0)).is_equal_to("Nieistniejace instance")
+        
+class Test_uczen_class_TEST_INPUT(unittest.TestCase):
+    def test_uczen_test_fail_empty_fields(self):
+        assert_that(Uczen.testInput).raises(ValueError).when_called_with('','przyroda','')
+    
+    def test_uczen_test_fail_nonexistent_przedmiot(self):
+        Przedmiot.przedmiot_list = ['Angielski']
+        assert_that(Uczen.testInput).raises(ValueError).when_called_with(1,'przyroda',3)
+    
+    def test_uczen_test_fail_grade_out_of_range(self):
+        Przedmiot.przedmiot_list = ['Angielski']
+        assert_that(Uczen.testInput).raises(ValueError).when_called_with(1,'Angielski',8)
+    
+    def test_uczen_test_success(self):
+        Przedmiot.przedmiot_list = ['Angielski']
+        assert_that(Uczen.testInput(1, 'Angielski',5)).is_equal_to(1)
+        
+class Test_uczen_class_DODAJ_OCENE(unittest.TestCase):
+    @patch('uczen.Uczen.testInput')
+    @patch('uczen.Uczen.instance_list')
+    @patch('przedmiot.Przedmiot.get_nauczyciel')
+    def test_dodaj_ocene_success(self, mock_testInput, mock_getInstanceOfStudent, mock_get_nauczyciel):
+        uczen_testowy = Uczen("Darek","Nowak","","")
+        mock_testInput.return_value = 1
+        Uczen.id_oceny = 0
+        mock_getInstanceOfStudent.return_value.id = 1
+        Przedmiot.przedmiot_list = ["Angielski"]
+        mock_get_nauczyciel.return_value = "Jan Kowalski"
+        assert_that(Uczen.dodaj_ocene(0,"Angielski",5)).is_equal_to(
+                    {'id_oceny': 0,
+                    'przedmiot': "Angielski",
+                    'nauczyciel': "Jan Kowalski",
+                    'wartosc': 5})

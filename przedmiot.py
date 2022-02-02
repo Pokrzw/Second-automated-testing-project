@@ -75,5 +75,11 @@ class Przedmiot():
             if item.nazwa == name:
                 return item
             
-            
-
+    
+    @classmethod
+    def get_nauczyciel(cls, name):
+        if name not in Przedmiot.przedmiot_list:
+            raise ValueError("Nie ma takiego przedmiotu")
+        for item in Przedmiot.instance_list:
+            if item.nazwa == name:
+                return item.nauczyciel

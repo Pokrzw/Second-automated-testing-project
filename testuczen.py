@@ -18,5 +18,8 @@
 # for uczen in Uczen.get_wszyscy_uczniowie():
 #     print(uczen)
 # Uczen.edit_uczen(7,"",'OwO')
-    
-
+a ='lorem'
+b =''
+c=0
+if "" in (a, b, c):
+ print("Jedno puste")
