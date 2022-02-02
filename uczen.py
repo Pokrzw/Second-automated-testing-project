@@ -108,6 +108,7 @@ class Uczen():
         Uczen.testInput(id_ucznia, przedmiot, wartosc)
         uczen_do_oceny = Uczen.get_instance(id_ucznia)       
         id_oceny = Uczen.id_oceny
+        print("Henlo")
         nauczyciel = Przedmiot.get_nauczyciel(przedmiot)
         new_ocena = {
                     'id_oceny': id_oceny,

@@ -262,8 +262,7 @@ class Test_uczen_class_DODAJ_OCENE(unittest.TestCase):
     @patch('uczen.Uczen.testInput')
     @patch('uczen.Uczen.get_instance')
     @patch('przedmiot.Przedmiot.get_nauczyciel')
-    def test_dodaj_ocene_success(self, mock_testInput, mock_getInstanceOfStudent, mock_get_nauczyciel):
-        # uczen_testowy = Uczen("Darek","Nowak","","")
+    def test_dodaj_ocene_success(self, mock_get_nauczyciel, mock_getInstanceOfStudent,  mock_testInput):
         mock_testInput.return_value = 1
         Uczen.id_oceny = 0
         mock_getInstanceOfStudent.return_value.oceny = []
