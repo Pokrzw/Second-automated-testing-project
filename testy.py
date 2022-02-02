@@ -260,13 +260,13 @@ class Test_uczen_class_TEST_INPUT(unittest.TestCase):
         
 class Test_uczen_class_DODAJ_OCENE(unittest.TestCase):
     @patch('uczen.Uczen.testInput')
-    @patch('uczen.Uczen.instance_list')
+    @patch('uczen.Uczen.get_instance')
     @patch('przedmiot.Przedmiot.get_nauczyciel')
     def test_dodaj_ocene_success(self, mock_testInput, mock_getInstanceOfStudent, mock_get_nauczyciel):
-        uczen_testowy = Uczen("Darek","Nowak","","")
+        # uczen_testowy = Uczen("Darek","Nowak","","")
         mock_testInput.return_value = 1
         Uczen.id_oceny = 0
-        mock_getInstanceOfStudent.return_value.id = 1
+        mock_getInstanceOfStudent.return_value.oceny = []
         Przedmiot.przedmiot_list = ["Angielski"]
         mock_get_nauczyciel.return_value = "Jan Kowalski"
         assert_that(Uczen.dodaj_ocene(0,"Angielski",5)).is_equal_to(
@@ -274,3 +274,4 @@ class Test_uczen_class_DODAJ_OCENE(unittest.TestCase):
                     'przedmiot': "Angielski",
                     'nauczyciel': "Jan Kowalski",
                     'wartosc': 5})
+       
