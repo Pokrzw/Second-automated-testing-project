@@ -604,3 +604,124 @@ class Test_uczen_class_EDYTUJ_UWAGE(unittest.TestCase):
     
     def test_edytuj_uwage_success(self):
             Uczen.edit_uwaga(0,"Nowa uwaga")
+
+class test_uczen_show_oceny_from_teacher(unittest.TestCase):
+    def setUp(self):
+        Uczen.all_oceny=[
+            {
+                    'id_ucznia': 0,
+                    'id_oceny': 0,
+                    'przedmiot': "Angielski",
+                    'nauczyciel': 'Irka',
+                    'wartosc': 5
+                },
+            {
+                    'id_ucznia': 0,
+                    'id_oceny': 1,
+                    'przedmiot': "Matematyka",
+                    'nauczyciel': "Joanna Czarnowska",
+                    'wartosc': 3
+                },{
+                    'id_ucznia': 3,
+                    'id_oceny': 2,
+                    'przedmiot': "Matematyka",
+                    'nauczyciel': "Joanna Czarnowska",
+                    'wartosc': 2
+                }
+        ]
+        mock_instance_1 = Mock(name = 'instance_list_0', id= 0, imie= "Lorem", nazwisko="Ipsum",oceny=[{
+                    'id_ucznia': 0,
+                    'id_oceny': 0,
+                    'przedmiot': "Angielski",
+                    'nauczyciel': 'Irka',
+                    'wartosc': 5
+                },
+                {
+                    'id_ucznia': 0,
+                    'id_oceny': 1,
+                    'przedmiot': "Matematyka",
+                    'nauczyciel': "Joanna Czarnowska",
+                    'wartosc': 3
+                }] )
+        
+        mock_instance_2 = Mock(name = 'instance_list_3',  id= 3, imie= "Test", nazwisko="User",oceny=[
+            {
+                    'id_ucznia': 3,
+                    'id_oceny': 2,
+                    'przedmiot': "Matematyka",
+                    'nauczyciel': "Joanna Czarnowska",
+                    'wartosc': 2
+                }
+        ] )
+        Uczen.instance_list = [mock_instance_1 ,mock_instance_2]
+        Przedmiot.przedmiot_list = ["Matematyka","Angielski"]
+        mock_przedmiot_matematyka = Mock(nazwa = "Matematyka", nauczyciel="Joanna Czarnowska")
+        mock_przedmiot_angielski = Mock(nazwa = "Angielski", nauczyciel="Irka")
+        Przedmiot.instance_list = [mock_przedmiot_matematyka, mock_przedmiot_angielski]
+    
+    def test_uczen_show_oceny_from_teacher_success(self):
+        assert_that(Uczen.show_oceny_from_teacher("Joanna Czarnowska")).is_equal_to("Imię ucznia: Lorem, nazwisko ucznia: Ipsum, ocena: 3, Imię ucznia: Test, nazwisko ucznia: User, ocena: 2, ")
+    
+    def test_uczen_show_oceny_from_teacher_fail(self):
+        assert_that(Uczen.show_oceny_from_teacher).raises(ValueError).when_called_with("Wiesławski")
+        
+class Test_user_class_show_avg_grade_from_przedmiot(unittest.TestCase):
+    def setUp(self):
+        Uczen.all_oceny=[
+            {
+                    'id_ucznia': 0,
+                    'id_oceny': 0,
+                    'przedmiot': "Angielski",
+                    'nauczyciel': 'Irka',
+                    'wartosc': 5
+                },
+            {
+                    'id_ucznia': 0,
+                    'id_oceny': 1,
+                    'przedmiot': "Matematyka",
+                    'nauczyciel': "Joanna Czarnowska",
+                    'wartosc': 3
+                },{
+                    'id_ucznia': 3,
+                    'id_oceny': 2,
+                    'przedmiot': "Matematyka",
+                    'nauczyciel': "Joanna Czarnowska",
+                    'wartosc': 2
+                }
+        ]
+        mock_instance_1 = Mock(name = 'instance_list_0', id= 0, imie= "Lorem", nazwisko="Ipsum",oceny=[{
+                    'id_ucznia': 0,
+                    'id_oceny': 0,
+                    'przedmiot': "Angielski",
+                    'nauczyciel': 'Irka',
+                    'wartosc': 5
+                },
+                {
+                    'id_ucznia': 0,
+                    'id_oceny': 1,
+                    'przedmiot': "Matematyka",
+                    'nauczyciel': "Joanna Czarnowska",
+                    'wartosc': 3
+                }] )
+        
+        mock_instance_2 = Mock(name = 'instance_list_3',  id= 3, imie= "Test", nazwisko="User",oceny=[
+            {
+                    'id_ucznia': 3,
+                    'id_oceny': 2,
+                    'przedmiot': "Matematyka",
+                    'nauczyciel': "Joanna Czarnowska",
+                    'wartosc': 2
+                }
+        ] )
+        Uczen.instance_list = [mock_instance_1 ,mock_instance_2]
+        Przedmiot.przedmiot_list = ["Matematyka","Angielski"]
+        mock_przedmiot_matematyka = Mock(nazwa = "Matematyka", nauczyciel="Joanna Czarnowska")
+        mock_przedmiot_angielski = Mock(nazwa = "Angielski", nauczyciel="Irka")
+        Przedmiot.instance_list = [mock_przedmiot_matematyka, mock_przedmiot_angielski]
+    
+    def test_show_avg_grade_from_przedmiot_failure(self):
+        assert_that(Uczen.show_avg_grade_from_przedmiot).raises(ValueError).when_called_with("Techniki Tłumaczeń")
+    
+    def test_show_avg_grade_from_przedmiot_success(self):
+        print()
+        assert_that(Uczen.show_avg_grade_from_przedmiot("Matematyka")).is_equal_to(2.5)

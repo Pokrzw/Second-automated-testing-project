@@ -196,4 +196,30 @@ class Uczen():
                 item['wartosc']=wartosc
                 return "Edycja oceny zakończona"
         raise ValueError("Nie ma uwagi o podanym id - nie mozna edytowac")
-            
+    
+    @staticmethod
+    def show_oceny_from_teacher(teacher):
+        for przedmiot in Przedmiot.przedmiot_list:
+            if Przedmiot.get_nauczyciel(przedmiot) == teacher:
+                oceny_arr = ''
+                for oceny in Uczen.all_oceny:
+                    if oceny["nauczyciel"] == teacher:
+                        uczen = Uczen.get_instance(oceny['id_ucznia'])
+                        uczen_imie = uczen.imie
+                        uczen_nazwisko = uczen.nazwisko
+                        oceny_arr += f"Imię ucznia: {uczen_imie}, nazwisko ucznia: {uczen_nazwisko}, ocena: {oceny['wartosc']}, "
+                return oceny_arr
+        raise ValueError("Nie ma takiego nauczyciela")    
+    
+    @staticmethod
+    def show_avg_grade_from_przedmiot(przedmiot):
+        if przedmiot not in Przedmiot.przedmiot_list:
+            raise ValueError("Nie ma takiego przedmiotu")
+        ilosc_ocen = 0
+        suma = 0
+        for ocena in Uczen.all_oceny:
+            if ocena['przedmiot'] == przedmiot:
+                ilosc_ocen += 1
+                suma += ocena['wartosc']
+        return suma/ilosc_ocen
+        
