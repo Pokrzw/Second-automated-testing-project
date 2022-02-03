@@ -1,3 +1,4 @@
+from cgi import test
 import unittest
 from unittest import mock
 from unittest.mock import Mock, patch
@@ -264,13 +265,191 @@ class Test_uczen_class_DODAJ_OCENE(unittest.TestCase):
     @patch('przedmiot.Przedmiot.get_nauczyciel')
     def test_dodaj_ocene_success(self, mock_get_nauczyciel, mock_getInstanceOfStudent,  mock_testInput):
         mock_testInput.return_value = 1
+        Uczen.id = 0
         Uczen.id_oceny = 0
         mock_getInstanceOfStudent.return_value.oceny = []
         Przedmiot.przedmiot_list = ["Angielski"]
         mock_get_nauczyciel.return_value = "Jan Kowalski"
         assert_that(Uczen.dodaj_ocene(0,"Angielski",5)).is_equal_to(
-                    {'id_oceny': 0,
+                    {
+                    'id_ucznia': 0,
+                    'id_oceny': 0,
                     'przedmiot': "Angielski",
                     'nauczyciel': "Jan Kowalski",
                     'wartosc': 5})
-       
+
+class Test_uczen_class_USUN_OCENE(unittest.TestCase):
+    def test_usun_ocene_success(self):
+        Uczen.all_oceny=[
+            {
+                    'id_ucznia': 0,
+                    'id_oceny': 0,
+                    'przedmiot': "Angielski",
+                    'nauczyciel': 'Irka',
+                    'wartosc': 5
+                },
+            {
+                    'id_ucznia': 0,
+                    'id_oceny': 1,
+                    'przedmiot': "Matematyka",
+                    'nauczyciel': "Joanna Czarnowska",
+                    'wartosc': 3
+                },{
+                    'id_ucznia': 3,
+                    'id_oceny': 2,
+                    'przedmiot': "Polski",
+                    'nauczyciel': "Wiesławski",
+                    'wartosc': 2
+                }
+        ]
+        mock_instance_0 = Mock(name = 'instance_list_0', id= 0, imie= "Test", nazwisko="User",oceny=[{
+                    'id_ucznia': 0,
+                    'id_oceny': 0,
+                    'przedmiot': "Angielski",
+                    'nauczyciel': 'Irka',
+                    'wartosc': 5
+                },
+                {
+                    'id_ucznia': 0,
+                    'id_oceny': 1,
+                    'przedmiot': "Matematyka",
+                    'nauczyciel': "Joanna Czarnowska",
+                    'wartosc': 3
+                }] )
+        
+        mock_instance_3 = Mock(name = 'instance_list_3',  id= 3, imie= "Test", nazwisko="User",oceny=[
+            {
+                    'id_ucznia': 3,
+                    'id_oceny': 2,
+                    'przedmiot': "Polski",
+                    'nauczyciel': "Wiesławski",
+                    'wartosc': 2
+                }
+        ] )
+        Uczen.instance_list = [mock_instance_0 ,mock_instance_3]
+        Uczen.delete_ocena(1)
+        assert_that(Uczen.all_oceny).does_not_contain({
+                    'id_ucznia': 0,
+                    'id_oceny': 1,
+                    'przedmiot': "Matematyka",
+                    'nauczyciel': "Joanna Czarnowska",
+                    'wartosc': 3
+                })
+        
+    def test_usun_ocene_failure(self):
+        Uczen.all_oceny=[
+            {
+                    'id_ucznia': 0,
+                    'id_oceny': 0,
+                    'przedmiot': "Angielski",
+                    'nauczyciel': 'Irka',
+                    'wartosc': 5
+                },
+            {
+                    'id_ucznia': 0,
+                    'id_oceny': 1,
+                    'przedmiot': "Matematyka",
+                    'nauczyciel': "Joanna Czarnowska",
+                    'wartosc': 3
+                },{
+                    'id_ucznia': 3,
+                    'id_oceny': 2,
+                    'przedmiot': "Polski",
+                    'nauczyciel': "Wiesławski",
+                    'wartosc': 2
+                }
+        ]
+        mock_instance_0 = Mock(name = 'instance_list_0', id= 0, imie= "Test", nazwisko="User",oceny=[{
+                    'id_ucznia': 0,
+                    'id_oceny': 0,
+                    'przedmiot': "Angielski",
+                    'nauczyciel': 'Irka',
+                    'wartosc': 5
+                },
+                {
+                    'id_ucznia': 0,
+                    'id_oceny': 1,
+                    'przedmiot': "Matematyka",
+                    'nauczyciel': "Joanna Czarnowska",
+                    'wartosc': 3
+                }] )
+        
+        mock_instance_3 = Mock(name = 'instance_list_3',  id= 3, imie= "Test", nazwisko="User",oceny=[
+            {
+                    'id_ucznia': 3,
+                    'id_oceny': 2,
+                    'przedmiot': "Polski",
+                    'nauczyciel': "Wiesławski",
+                    'wartosc': 2
+                }
+        ] )
+        Uczen.instance_list = [mock_instance_0 ,mock_instance_3]
+        assert_that(Uczen.delete_ocena).raises(ValueError).when_called_with(4)
+        
+class Test_uczen_class_EDYTUJ_OCENE(unittest.TestCase):
+    def setUp(self):
+        Uczen.all_oceny=[
+            {
+                    'id_ucznia': 0,
+                    'id_oceny': 0,
+                    'przedmiot': "Angielski",
+                    'nauczyciel': 'Irka',
+                    'wartosc': 5
+                },
+            {
+                    'id_ucznia': 0,
+                    'id_oceny': 1,
+                    'przedmiot': "Matematyka",
+                    'nauczyciel': "Joanna Czarnowska",
+                    'wartosc': 3
+                },{
+                    'id_ucznia': 3,
+                    'id_oceny': 2,
+                    'przedmiot': "Polski",
+                    'nauczyciel': "Wiesławski",
+                    'wartosc': 2
+                }
+        ]
+        mock_instance_0 = Mock(name = 'instance_list_0', id= 0, imie= "Test", nazwisko="User",oceny=[{
+                    'id_ucznia': 0,
+                    'id_oceny': 0,
+                    'przedmiot': "Angielski",
+                    'nauczyciel': 'Irka',
+                    'wartosc': 5
+                },
+                {
+                    'id_ucznia': 0,
+                    'id_oceny': 1,
+                    'przedmiot': "Matematyka",
+                    'nauczyciel': "Joanna Czarnowska",
+                    'wartosc': 3
+                }] )
+        
+        mock_instance_3 = Mock(name = 'instance_list_3',  id= 3, imie= "Test", nazwisko="User",oceny=[
+            {
+                    'id_ucznia': 3,
+                    'id_oceny': 2,
+                    'przedmiot': "Polski",
+                    'nauczyciel': "Wiesławski",
+                    'wartosc': 2
+                }
+        ] )
+        Uczen.instance_list = [mock_instance_0 ,mock_instance_3]
+    
+        
+    def test_edytuj_ocene_failure_wrong_index(self):
+        assert_that(Uczen.edit_ocena).raises(ValueError).when_called_with(4,3)
+    
+    def test_edytuj_ocene_failure_wrong_ocena_value(self):
+        assert_that(Uczen.edit_ocena).raises(ValueError).when_called_with(0,7)
+        
+    def test_edytuj_ocene_success(self):
+        Uczen.edit_ocena(2,4)
+        assert_that(Uczen.all_oceny).contains({
+                    'id_ucznia': 3,
+                    'id_oceny': 2,
+                    'przedmiot': "Polski",
+                    'nauczyciel': "Wiesławski",
+                    'wartosc': 4
+                })
+        

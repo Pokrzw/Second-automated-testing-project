@@ -6,7 +6,13 @@ class Uczen():
     instance_list = []
     id = 0
     id_oceny = 0
-    def __init__(self, imie, nazwisko, oceny, uwagi):
+    all_oceny = []
+    all_uwagi = []
+    def __init__(self, imie: str, nazwisko: str, oceny: list=True, uwagi: list=True):
+            if oceny:
+                self.oceny = []
+            if uwagi:
+                self.uwagi = []
             self.imie = imie
             self.nazwisko = nazwisko
             self.id = Uczen.id
@@ -108,9 +114,9 @@ class Uczen():
         Uczen.testInput(id_ucznia, przedmiot, wartosc)
         uczen_do_oceny = Uczen.get_instance(id_ucznia)       
         id_oceny = Uczen.id_oceny
-        print("Henlo")
         nauczyciel = Przedmiot.get_nauczyciel(przedmiot)
         new_ocena = {
+                    'id_ucznia': id_ucznia,
                     'id_oceny': id_oceny,
                     'przedmiot': przedmiot,
                     'nauczyciel': nauczyciel,
@@ -118,4 +124,29 @@ class Uczen():
                 }
         Uczen.id_oceny += 1
         uczen_do_oceny.oceny.append(new_ocena)
+        Uczen.all_oceny.append(new_ocena)
         return new_ocena
+
+    @staticmethod
+    def delete_ocena(id_oceny):
+        for item in Uczen.all_oceny:
+            if item['id_oceny'] == id_oceny:
+                Uczen.all_oceny.remove(item)
+                edytowany_uczen=Uczen.get_instance(item['id_ucznia'])
+                edytowany_uczen.oceny.remove(item)
+                return "Usunięto ocenę"
+        raise ValueError("Nie ma oceny o podanym id - nie mozna usunac")
+            
+    @staticmethod
+    def edit_ocena(id_oceny, wartosc):
+        if wartosc<1 or wartosc>6:
+            raise ValueError("Ocena nie moze byc wieksza od 6 lub mniejsza od 1")   
+        for item in Uczen.all_oceny:
+            if item['id_oceny'] == id_oceny:
+                edytowany_uczen=Uczen.get_instance(item['id_ucznia'])
+                index = edytowany_uczen.oceny.index(item)
+                edytowany_uczen.oceny[index]['wartosc']=wartosc
+                item['wartosc']=wartosc
+                return "Edycja oceny zakończona"
+        raise ValueError("Nie ma oceny o podanym id - nie mozna edytowac")
+            
