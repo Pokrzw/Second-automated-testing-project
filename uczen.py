@@ -6,6 +6,7 @@ class Uczen():
     instance_list = []
     id = 0
     id_oceny = 0
+    id_uwagi = 0
     all_oceny = []
     all_uwagi = []
     def __init__(self, imie: str, nazwisko: str, oceny: list=True, uwagi: list=True):
@@ -108,7 +109,14 @@ class Uczen():
         if c<1 or c>6:
             raise ValueError("Ocena nie moze byc wieksza od 6 lub mniejsza od 1")   
         return 1             
-      
+    
+    @staticmethod
+    def testInputUwaga(a,b):
+        if "" in (a, b):
+            raise ValueError("Jeden z atrybutów jest pusty")
+        if b not in Przedmiot.przedmiot_list:
+            raise ValueError("Nie ma takiego przedmiotu - nie mozna wystawic oceny")           
+            
     @staticmethod
     def dodaj_ocene(id_ucznia, przedmiot, wartosc):
         Uczen.testInput(id_ucznia, przedmiot, wartosc)
@@ -149,4 +157,43 @@ class Uczen():
                 item['wartosc']=wartosc
                 return "Edycja oceny zakończona"
         raise ValueError("Nie ma oceny o podanym id - nie mozna edytowac")
+
+    @staticmethod
+    def dodaj_uwage(id_ucznia, przedmiot, wartosc):
+        Uczen.testInputUwaga(id_ucznia, przedmiot)
+        uczen_do_uwagi = Uczen.get_instance(id_ucznia)
+        id_uwagi = Uczen.id_uwagi
+        nauczyciel = Przedmiot.get_nauczyciel(przedmiot)
+        new_uwaga = {
+                    'id_ucznia': id_ucznia,
+                    'id_uwagi': id_uwagi,
+                    'przedmiot': przedmiot,
+                    'nauczyciel': nauczyciel,
+                    'wartosc': wartosc
+                }
+        Uczen.id_uwagi += 1
+        uczen_do_uwagi.uwagi.append(new_uwaga)
+        Uczen.all_uwagi.append(new_uwaga)
+        return new_uwaga
+
+    @staticmethod
+    def delete_uwaga(id_uwagi):
+        for item in Uczen.all_uwagi:
+            if item['id_uwagi'] == id_uwagi:
+                Uczen.all_uwagi.remove(item)
+                edytowany_uczen=Uczen.get_instance(item['id_ucznia'])
+                edytowany_uczen.uwagi.remove(item)
+                return "Usunieto uwage"
+        raise ValueError("Nie ma uwagi o podanym id - nie mozna usunac")
+            
+    @staticmethod
+    def edit_uwaga(id_uwagi, wartosc):
+        for item in Uczen.all_uwagi:
+            if item['id_uwagi'] == id_uwagi:
+                edytowany_uczen=Uczen.get_instance(item['id_ucznia'])
+                index = edytowany_uczen.uwagi.index(item)
+                edytowany_uczen.uwagi[index]['wartosc']=wartosc
+                item['wartosc']=wartosc
+                return "Edycja oceny zakończona"
+        raise ValueError("Nie ma uwagi o podanym id - nie mozna edytowac")
             

@@ -155,6 +155,18 @@ class Test_przedmiot_class_GET_INSTANCE(unittest.TestCase):
         Przedmiot.delete_przedmiot("Matematyka")
         Przedmiot.delete_przedmiot("Polski")
         
+class Test_uczen_class_testInputUwaga(unittest.TestCase):
+    def test_uczen_test_fail_empty_fields(self):
+        assert_that(Uczen.testInput).raises(ValueError).when_called_with('','przyroda','')
+    
+    def test_uczen_test_fail_nonexistent_przedmiot(self):
+        Przedmiot.przedmiot_list = ['Angielski']
+        assert_that(Uczen.testInput).raises(ValueError).when_called_with(1,'przyroda',3)
+    
+    def test_uczen_test_success(self):
+        Przedmiot.przedmiot_list = ['Angielski']
+        assert_that(Uczen.testInput(1, 'Angielski',5)).is_equal_to(1)
+        
         
 class Test_uczen_class_CREATE_UCZEN(unittest.TestCase):
     def test_create_success_oneGrade_oneUwaga(self):
@@ -452,4 +464,143 @@ class Test_uczen_class_EDYTUJ_OCENE(unittest.TestCase):
                     'nauczyciel': "Wiesławski",
                     'wartosc': 4
                 })
+
+class Test_uczen_class_DODAJ_Uwaga(unittest.TestCase):
+    @patch('uczen.Uczen.testInputUwaga')
+    @patch('uczen.Uczen.get_instance')
+    @patch('przedmiot.Przedmiot.get_nauczyciel')
+    def test_dodaj_uwage_success(self, mock_get_nauczyciel, mock_getInstanceOfStudent,  mock_testInputUwaga):
+        mock_testInputUwaga.return_value = 1
+        Uczen.id = 0
+        Uczen.id_uwagi = 0
+        mock_getInstanceOfStudent.return_value.uwagi = []
+        Przedmiot.przedmiot_list = ["Angielski"]
+        mock_get_nauczyciel.return_value = "Jan Kowalski"
+        assert_that(Uczen.dodaj_uwage(0,"Angielski","Spaniały studen")).is_equal_to(
+                    {
+                    'id_ucznia': 0,
+                    'id_uwagi': 0,
+                    'przedmiot': "Angielski",
+                    'nauczyciel': "Jan Kowalski",
+                    'wartosc': 'Spaniały studen'})
+
+class Test_uczen_class_USUN_UWAGE(unittest.TestCase):
+    def setUp(self):
+        Uczen.all_uwagi=[
+            {
+                    'id_ucznia': 0,
+                    'id_uwagi': 0,
+                    'przedmiot': "Angielski",
+                    'nauczyciel': 'Irka',
+                    'wartosc': 'Spaniały studen'
+                },
+            {
+                    'id_ucznia': 0,
+                    'id_uwagi': 1,
+                    'przedmiot': "Matematyka",
+                    'nauczyciel': "Joanna Czarnowska",
+                    'wartosc': "Lorem Ipsum"
+                },{
+                    'id_ucznia': 3,
+                    'id_uwagi': 2,
+                    'przedmiot': "Polski",
+                    'nauczyciel': "Wiesławski",
+                    'wartosc': 'Panda 3'
+                }
+        ]
+        mock_instance_0 = Mock(name = 'instance_list_0', id= 0, imie= "Test", nazwisko="User",uwagi=[ {
+                    'id_ucznia': 0,
+                    'id_uwagi': 0,
+                    'przedmiot': "Angielski",
+                    'nauczyciel': 'Irka',
+                    'wartosc': 'Spaniały studen'
+                },
+            {
+                    'id_ucznia': 0,
+                    'id_uwagi': 1,
+                    'przedmiot': "Matematyka",
+                    'nauczyciel': "Joanna Czarnowska",
+                    'wartosc': "Lorem Ipsum"
+                }] )
         
+        mock_instance_3 = Mock(name = 'instance_list_3',  id= 3, imie= "Test", nazwisko="User",oceny=[
+            {
+                    'id_ucznia': 3,
+                    'id_uwagi': 2,
+                    'przedmiot': "Polski",
+                    'nauczyciel': "Wiesławski",
+                    'wartosc': 'Panda 3'
+                }
+        ] )
+        Uczen.instance_list = [mock_instance_0 ,mock_instance_3]
+        
+        
+    def test_usun_uwage_success(self):
+        Uczen.delete_uwaga(1)
+        assert_that(Uczen.all_uwagi).does_not_contain({
+                    'id_ucznia': 0,
+                    'id_uwagi': 1,
+                    'przedmiot': "Matematyka",
+                    'nauczyciel': "Joanna Czarnowska",
+                    'wartosc': "Lorem Ipsum"
+                })
+    def test_usun_uwage_failure(self):
+        assert_that(Uczen.delete_uwaga).raises(ValueError).when_called_with(5)
+
+class Test_uczen_class_EDYTUJ_UWAGE(unittest.TestCase):
+    def setUp(self):
+        Uczen.all_uwagi=[
+            {
+                    'id_ucznia': 0,
+                    'id_uwagi': 0,
+                    'przedmiot': "Angielski",
+                    'nauczyciel': 'Irka',
+                    'wartosc': 'Spaniały studen'
+                },
+            {
+                    'id_ucznia': 0,
+                    'id_uwagi': 1,
+                    'przedmiot': "Matematyka",
+                    'nauczyciel': "Joanna Czarnowska",
+                    'wartosc': "Lorem Ipsum"
+                },{
+                    'id_ucznia': 3,
+                    'id_uwagi': 2,
+                    'przedmiot': "Polski",
+                    'nauczyciel': "Wiesławski",
+                    'wartosc': 'Panda 3'
+                }
+        ]
+        mock_instance_0 = Mock(name = 'instance_list_0', id= 0, imie= "Test", nazwisko="User",uwagi=[
+             {
+                    'id_ucznia': 0,
+                    'id_uwagi': 0,
+                    'przedmiot': "Angielski",
+                    'nauczyciel': 'Irka',
+                    'wartosc': 'Spaniały studen'
+                },
+            {
+                    'id_ucznia': 0,
+                    'id_uwagi': 1,
+                    'przedmiot': "Matematyka",
+                    'nauczyciel': "Joanna Czarnowska",
+                    'wartosc': "Lorem Ipsum"
+                }
+        ])
+        
+        mock_instance_3 = Mock(name = 'instance_list_3',  id= 3, imie= "Test", nazwisko="User",uwagi=[
+            {
+                    'id_ucznia': 3,
+                    'id_uwagi': 2,
+                    'przedmiot': "Polski",
+                    'nauczyciel': "Wiesławski",
+                    'wartosc': 'Panda 3'
+                }
+        ] )
+        Uczen.instance_list = [mock_instance_0 ,mock_instance_3]
+    
+    def test_edytuj_uwage_failure_wrong_index(self):
+            assert_that(Uczen.edit_uwaga).raises(ValueError).when_called_with(5, "Nowa uwaga")
+    
+    def test_edytuj_uwage_success(self):
+            Uczen.edit_uwaga(0,"Nowa uwaga")
