@@ -1,6 +1,4 @@
-from pyparsing import PrecededBy
-from errors import EmptyNameField, EmptyTeacherField, NotUniquePrzedmiot
-from przedmiot import Przedmiot
+from src.przedmiot import Przedmiot
 
 class Uczen():
     instance_list = []
@@ -22,8 +20,7 @@ class Uczen():
                 if oceny == '':
                     self.oceny = []
                 if oceny != '':
-                    oceny_arr = []
-                    oceny_arr.append(oceny)
+                    oceny_arr = [oceny]
                     self.oceny = oceny_arr    
             else:
                 self.oceny = oceny
@@ -32,18 +29,16 @@ class Uczen():
                 if uwagi == '':
                     self.uwagi = []
                 if uwagi != '':
-                    uwagi_arr = []
-                    uwagi_arr.append(uwagi)
+                    uwagi_arr = [uwagi]
                     self.uwagi = uwagi_arr    
             else:
                 self.uwagi = uwagi
             Uczen.id += 1
             Uczen.instance_list.append(self)
 
-        
-    @classmethod    
+    @classmethod
     def create_uczen(cls, imie, nazwisko, oceny, uwagi):
-        if imie == '' or nazwisko== '':
+        if imie == '' or nazwisko == '':
             raise ValueError("Nie wprowadzono ani imienia ani nazwiska")
         return cls(imie, nazwisko, oceny, uwagi)
         
@@ -116,7 +111,8 @@ class Uczen():
             raise ValueError("Jeden z atrybutów jest pusty")
         if b not in Przedmiot.przedmiot_list:
             raise ValueError("Nie ma takiego przedmiotu - nie mozna wystawic oceny")           
-            
+        return 1
+
     @staticmethod
     def dodaj_ocene(id_ucznia, przedmiot, wartosc):
         Uczen.testInput(id_ucznia, przedmiot, wartosc)
@@ -160,7 +156,8 @@ class Uczen():
 
     @staticmethod
     def dodaj_uwage(id_ucznia, przedmiot, wartosc):
-        Uczen.testInputUwaga(id_ucznia, przedmiot)
+        if Uczen.testInputUwaga(id_ucznia, przedmiot) != 1:
+            return Uczen.testInputUwaga(id_ucznia, przedmiot)
         uczen_do_uwagi = Uczen.get_instance(id_ucznia)
         id_uwagi = Uczen.id_uwagi
         nauczyciel = Przedmiot.get_nauczyciel(przedmiot)
