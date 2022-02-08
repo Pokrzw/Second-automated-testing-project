@@ -31,3 +31,4 @@ class Student:
     def notes(self) -> str:
         return self.notes
 
+newStudent = Student("Jan","Kowalski","3A")
