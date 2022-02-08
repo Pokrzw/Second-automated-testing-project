@@ -6,4 +6,4 @@ class Student:
         self.classCode = classCode
         self.grades = []
         self.notes = []
-    
+    def checkName(self, name):
