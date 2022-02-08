@@ -8,9 +8,8 @@ class Student:
         self.grades = []
         self.notes = []
     def checkName(self, name):
-        pattern = re.compile('[A-Z]{1}[a-z]')
-        pattern.match(string)
-
-        nameRegex =
+        namePattern = '[A-Z][a-z]*'
+        if namePattern.match(name)!=None:
+            return 
     def checkClassCode(self, classCode):
         pass
