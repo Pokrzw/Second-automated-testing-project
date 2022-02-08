@@ -3,9 +3,9 @@ class Student:
     id = 0
     def __init__(self, name:str, surname:str, classCode:str, grades:list, notes:list ):
         self.id = Student.id
-        self.name = name.checkName(name)
-        self.surname = surname
-        self.classCode = classCode
+        self.name = self.checkName(name)
+        self.surname = self.checkName(surname)
+        self.classCode = self.checkClassCode(classCode)
         self.grades = []
         self.notes = []
         id += 1
