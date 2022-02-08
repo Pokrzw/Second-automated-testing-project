@@ -9,15 +9,25 @@ class Student:
         self.grades = []
         self.notes = []
         id += 1
-    def checkName(self, name):
-        namePattern = '[A-Z][a-z]*'
-        if namePattern.match(name) is not None:
+    @staticmethod
+    def checkName(name):
+        namePattern = r'[A-Z][a-z]*'
+        if re.fullmatch(namePattern,name) is not None:
             return name
         raise ValueError("Given name is not correct")
 
-    def checkClassCode(self, classCode):
-        classCodePattern = '[1-8][A-G]'
-        if classCodePattern.match(classCode) is not None:
+    @staticmethod
+    def checkClassCode(classCode):
+        classCodePattern = r'[1-8][A-G]'
+        if re.fullmatch(classCodePattern,classCode) is not None:
             return classCode
         raise ValueError("Given classCode is not correct")
+
+    @property
+    def grades(self) -> str:
+        return self.grades
+
+    @property
+    def notes(self) -> str:
+        return self.notes
 
