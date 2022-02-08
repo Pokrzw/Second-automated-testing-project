@@ -9,9 +9,9 @@ class Student:
         self.name = self.checkName(name)
         self.surname = self.checkName(surname)
         self.classCode = self.checkClassCode(classCode)
-        self.grades = []
-        self.notes = []
-        id += 1
+        self._grades = []
+        self._notes = []
+        Student.id += 1
 
     @staticmethod
     def checkName(name):
@@ -29,11 +29,11 @@ class Student:
 
     @property
     def grades(self):
-        return self.grades
+        return self._grades
 
     @property
     def notes(self):
-        return self.notes
+        return self._notes
 
 
 newStudent = Student("Jan", "Kowalski", "3A")
