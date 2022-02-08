@@ -3,3 +3,5 @@ class Database:
         pass
     def getAllStudents(self):
         pass
+    def createStudent(self,name:str, surname:str, classCode:str):
+        pass

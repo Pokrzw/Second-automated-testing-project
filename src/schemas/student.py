@@ -1,7 +1,7 @@
 import re
 class Student:
     id = 0
-    def __init__(self, name:str, surname:str, classCode:str, grades:list, notes:list ):
+    def __init__(self, name:str, surname:str, classCode:str ):
         self.id = Student.id
         self.name = self.checkName(name)
         self.surname = self.checkName(surname)
