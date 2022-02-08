@@ -35,5 +35,3 @@ class Student:
     def notes(self):
         return self._notes
 
-
-newStudent = Student("Jan", "Kowalski", "3A")
