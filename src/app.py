@@ -79,3 +79,10 @@ class App:
             return "This grade does not exist"
         Database.edit_grade(grade_id, student_id, teacher_id, subject_id, value)
         return Database.edit_grade_response()
+
+    @staticmethod
+    def delete_grade(grade_id):
+        if Database.check_if_grade_exists(grade_id) is None:
+            return "This grade does not exist"
+        Database.delete_grade(grade_id)
+        return Database.delete_grade_response()

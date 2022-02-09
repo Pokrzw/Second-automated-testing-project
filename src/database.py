@@ -107,3 +107,12 @@ class Database:
         if Database.edit_grade() == -1:
             return False
         return True
+
+    def delete_grade(self):
+        pass
+
+    @staticmethod
+    def delete_grade_response():
+        if Database.delete_grade() == -1:
+            return False
+        return True
