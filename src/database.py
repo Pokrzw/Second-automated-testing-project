@@ -65,10 +65,10 @@ class Database:
             return False
         return True
 
-    def check_if_teacher_exists(self,id):
+    def check_if_teacher_exists(self):
         pass
 
-    def edit_teacher(self,id, name, surname):
+    def edit_teacher(self):
         pass
 
     @staticmethod
@@ -77,11 +77,11 @@ class Database:
             return False
         return True
 
-    def delete_teacher(self, name, surname):
+    def delete_teacher(self):
         pass
 
     @staticmethod
-    def edit_teacher_response():
-        if Database.edit_teacher() == -1:
+    def delete_teacher_response():
+        if Database.delete_teacher() == -1:
             return False
         return True
