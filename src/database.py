@@ -46,3 +46,12 @@ class Database:
         if Database.edit_subject() == -1:
             return False
         return True
+
+    def delete_subject(self):
+        pass
+
+    @staticmethod
+    def delete_subject_response():
+        if Database.delete_subject() == -1:
+            return False
+        return True
