@@ -101,7 +101,7 @@ class App:
 
     @staticmethod
     def delete_note(note_id):
-        if Database.check_if_grade_exists(note_id) is None:
+        if Database.check_if_note_exists(note_id) is None:
             return "This note does not exist"
         Database.delete_note(note_id)
         return Database.delete_note_response()
