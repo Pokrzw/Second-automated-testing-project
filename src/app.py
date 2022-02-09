@@ -71,4 +71,11 @@ class App:
     @staticmethod
     def add_grade(grade_id, student_id, teacher_id, subject_id, value):
         Database.add_grade(grade_id, student_id, teacher_id, subject_id, value)
-        return
+        return Database.add_grade_response()
+
+    @staticmethod
+    def edit_grade(grade_id, student_id, teacher_id, subject_id, value):
+        if Database.check_if_grade_exists(grade_id) is None:
+            return "This grade does not exist"
+        Database.edit_grade(grade_id, student_id, teacher_id, subject_id, value)
+        return Database.edit_grade_response()

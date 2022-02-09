@@ -94,3 +94,16 @@ class Database:
         if Database.add_grade() == -1:
             return False
         return True
+
+    @staticmethod
+    def check_if_grade_exists(id):
+        pass
+
+    def edit_grade(self):
+        pass
+
+    @staticmethod
+    def edit_grade_response():
+        if Database.edit_grade() == -1:
+            return False
+        return True
