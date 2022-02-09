@@ -15,4 +15,9 @@ class TestCreateSubject(unittest.TestCase):
         nauczyciel = 'Jan Kowalski'
         assert_that(Subject(name, nauczyciel)).is_instance_of(Subject)
 
+class Test_app_add_subject(unittest.TestCase):
+    def setUp(self) -> None:
+        app = App()
+    @patch('src.database.Database.check_if_przedmiot_exists')
+    def test_add_subject_success(self):
 
