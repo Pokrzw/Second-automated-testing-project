@@ -14,7 +14,7 @@ class TestCreateTeacher(unittest.TestCase):
         name = "343fdsd"
         assert_that(Teacher.checkName).raises(ValueError).when_called_with(name)
 
-  def test_create_teacher_correct_input(self):
+    def test_create_teacher_correct_input(self):
         name = "Jan"
         surname = "Kowalski"
         newTeacher = Teacher(name, surname)
