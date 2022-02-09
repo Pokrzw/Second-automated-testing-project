@@ -89,7 +89,7 @@ class App:
 
     @staticmethod
     def add_note(note_id, student_id, teacher_id, subject_id, text):
-        Database.add_grade(note_id, student_id, teacher_id, subject_id, text)
+        Database.add_note()
         return Database.add_note_response()
 
     @staticmethod
