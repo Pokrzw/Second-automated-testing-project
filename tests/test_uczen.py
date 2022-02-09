@@ -10,18 +10,18 @@ from assertpy import assert_that
 from src.app import App
 
 
-class TestCreateUczen(unittest.TestCase):
+class TestCreateStudent(unittest.TestCase):
     @patch("src.database.Database.add_student")
-    def test_create_uczen_incorrect_name(self, mock_create_student):
+    def test_create_student_incorrect_name(self, mock_create_student):
         mock_create_student.name = "343fdsd"
         assert_that(Student.checkName).raises(ValueError).when_called_with(mock_create_student.name)
 
-    def test_create_uczen_wrong_classcode(self):
+    def test_create_student_wrong_classcode(self):
         mock_Input_data = Mock(classCode='aa')
         assert_that(Student.checkClassCode).raises(ValueError).when_called_with(mock_Input_data.classCode)
 
     @patch("src.database.Database.add_student")
-    def test_create_uczen_correct_input(self, mock_create):
+    def test_create_student_correct_input(self, mock_create):
         mock_create.name = "Jan"
         mock_create.surname = "Kowalski"
         mock_create.classCode = "3A"
@@ -45,7 +45,7 @@ class TestAppCreateStudent(unittest.TestCase):
         mock_adding_student.return_value = self.mock_results()
         assert_that(App.create_student("Jan", "9879", "xx")).is_equal_to(-1)
 
-class TestAppEditUczen(unittest.TestCase):
+class TestAppEditStudent(unittest.TestCase):
     @patch('src.database.Database.search_student_by_id')
     def test_edit_student_fail(self, mock_search):
         mock_search.return_value = None
@@ -57,3 +57,9 @@ class TestAppEditUczen(unittest.TestCase):
         mock_search.return_value = {"id":1, "name": "Jan", "surname":"Kowalski", "classCode":"5D"}
         mock_edit_student.return_value = {"id":1, "name": "Jan", "surname":"Kowalski", "classCode":"5A"}
         assert_that(App.edit_student(1,"","","5A")).is_equal_to({"id":1, "name": "Jan", "surname":"Kowalski", "classCode":"5A"})
+
+class TestAppEditStudent(unittest.TestCase):
+    @patch('src.database.Database.search_student_by_id')
+    def test_delete_student_fail(self, mock_search):
+        mock_search.return_value = None
+        assert_that(App.delete_student).raises(ValueError).when_called_with("g")

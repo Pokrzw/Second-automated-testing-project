@@ -23,3 +23,4 @@ class App:
         else:
             deleted_student = Database.search_student_by_id(id)
             Database.delete_student(id)
+            return deleted_student
