@@ -63,14 +63,14 @@ class TestAppDeleteTeacher(unittest.TestCase):
 
     @patch('src.database.Database.check_if_teacher_exists')
     @patch('src.database.Database.delete_teacher')
+    def test_delete_teacher_success(self, mock_delete, mock_search):
+        mock_search.return_value = "Student object"
+        mock_delete.return_value = 1
+        assert_that(self.app.delete_teacher(1)).is_equal_to(True)
+
+    @patch('src.database.Database.check_if_teacher_exists')
+    @patch('src.database.Database.delete_teacher')
     def test_delete_teacher_fail(self, mock_delete, mock_search):
         mock_search.return_value = "Teacher object"
         mock_delete.return_value = -1
         assert_that(self.app.delete_teacher(1)).is_equal_to(False)
-
-#     @patch('src.database.Database.search_student_by_id')
-#     @patch('src.database.Database.delete_student')
-#     def test_delete_student_success(self, mock_delete, mock_search):
-#         mock_search.return_value = "Student object"
-#         mock_delete.return_value = 1
-#         assert_that(self.app.delete_student(1)).is_equal_to(True)
