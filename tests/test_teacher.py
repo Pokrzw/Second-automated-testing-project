@@ -41,25 +41,25 @@ class TestAppEditTeacher(unittest.TestCase):
         self.app = App()
 
     @patch('src.database.Database.check_if_teacher_exists')
-    def test_edit_student_fail(self, mock_search):
+    def test_edit_student_fail_techer_doesnt_exist(self, mock_search):
         mock_search.return_value = False
         assert_that(self.app.edit_teacher(1,"","")).is_equal_to("Teacher does not exists")
 
-#     @patch('src.database.Database.edit_student')
-#     @patch('src.database.Database.search_student_by_id')
-#     def test_edit_student_success(self, mock_search, mock_edit_student):
-#         mock_search.return_value = {"id":1, "name": "Jan", "surname":"Kowalski", "classCode":"5D"}
-#         mock_edit_student.return_value = 1
-#         assert_that(self.app.edit_student(1,"","","5A")).is_equal_to(True)
-#
-# class TestAppDeleteStudent(unittest.TestCase):
-#     def setUp(self) -> None:
-#         self.app = App()
-#     @patch('src.database.Database.search_student_by_id')
-#     def test_delete_student_fail_no_id(self, mock_search):
-#         mock_search.return_value = None
-#         assert_that(self.app.delete_student).raises(ValueError).when_called_with("g")
-#
+    @patch('src.database.Database.edit_teacher')
+    @patch('src.database.Database.check_if_teacher_exists')
+    def test_edit_student_success(self, mock_search, mock_edit_teacher):
+        mock_search.return_value = {"id":1, "name": "Jan", "surname":"Kowalski", "classCode":"5D"}
+        mock_edit_teacher.return_value = 1
+        assert_that(self.app.edit_teacher(1,"","")).is_equal_to(True)
+
+class TestAppDeleteTeacher(unittest.TestCase):
+    def setUp(self) -> None:
+        self.app = App()
+    @patch('src.database.Database.search_student_by_id')
+    def test_delete_student_fail_no_id(self, mock_search):
+        mock_search.return_value = None
+        assert_that(self.app.delete_student).raises(ValueError).when_called_with("g")
+
 #
 #     @patch('src.database.Database.search_student_by_id')
 #     @patch('src.database.Database.delete_student')
