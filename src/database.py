@@ -37,3 +37,12 @@ class Database:
         if Database.create_subject()==-1:
             return False
         return True
+
+    def edit_subject(self):
+        pass
+
+    @staticmethod
+    def edit_subject_response():
+        if Database.edit_subject() == -1:
+            return False
+        return True

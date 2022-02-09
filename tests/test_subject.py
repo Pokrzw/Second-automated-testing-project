@@ -38,3 +38,25 @@ class Test_app_add_subject(unittest.TestCase):
         mock_create.return_value = -1
         assert_that(self.app.add_subject("Fizyka", "Marcin Nowak")).is_equal_to(False)
 
+class Test_app_edit_subject(unittest.TestCase):
+    def setUp(self) -> None:
+        self.app = App()
+
+    @patch('src.database.Database.edit_subject')
+    @patch('src.database.Database.check_if_subject_exists')
+    def test_edit_subject_success(self, mock_check, mock_edit):
+        mock_check.return_value = True
+        mock_edit.return_value = 1
+        assert_that(self.app.edit_subject("Matematyka","Marcin Nowak")).is_equal_to(True)
+
+    @patch('src.database.Database.check_if_subject_exists')
+    def test_edit_subject_fail_subject_doesnt_exist(self, mock_check):
+        mock_check.return_value = False
+        assert_that(self.app.edit_subject("Matematyka", "Marcin Nowak")).is_equal_to("Subject does not exists")
+
+    @patch('src.database.Database.edit_subject')
+    @patch('src.database.Database.check_if_subject_exists')
+    def test_add_subject_fail(self, mock_check, mock_edit):
+        mock_check.return_value = True
+        mock_edit.return_value = -1
+        assert_that(self.app.edit_subject("Fizyka", "Marcin Nowak")).is_equal_to(False)

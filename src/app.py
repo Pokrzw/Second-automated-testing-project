@@ -35,3 +35,9 @@ class App:
         Database.create_subject(name, teacher)
         return Database.create_subject_response()
 
+    @staticmethod
+    def edit_subject(name, teacher):
+        if Database.check_if_subject_exists(name) is False:
+            return "Subject does not exists"
+        Database.edit_subject(name, teacher)
+        return Database.edit_subject_response()
