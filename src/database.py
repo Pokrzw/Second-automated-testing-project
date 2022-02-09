@@ -32,7 +32,8 @@ class Database:
     def check_if_subject_exists(self, subject):
         pass
 
-    def create_subject_response(self):
+    @staticmethod
+    def create_subject_response():
         if Database.create_subject()==-1:
             return False
         return True

@@ -17,7 +17,24 @@ class TestCreateSubject(unittest.TestCase):
 
 class Test_app_add_subject(unittest.TestCase):
     def setUp(self) -> None:
-        app = App()
-    @patch('src.database.Database.check_if_przedmiot_exists')
-    def test_add_subject_success(self):
+        self.app = App()
+
+    @patch('src.database.Database.create_subject')
+    @patch('src.database.Database.check_if_subject_exists')
+    def test_add_subject_success(self, mock_check, mock_create):
+        mock_check.return_value = False
+        mock_create.return_value = 1
+        assert_that(self.app.add_subject("Matematyka","Marcin Nowak")).is_equal_to(True)
+
+    @patch('src.database.Database.check_if_subject_exists')
+    def test_add_subject_fail_subject_exists(self, mock_check):
+        mock_check.return_value = True
+        assert_that(self.app.add_subject("Matematyka", "Marcin Nowak")).is_equal_to("Subject already exists")
+
+    @patch('src.database.Database.create_subject')
+    @patch('src.database.Database.check_if_subject_exists')
+    def test_add_subject_fail(self, mock_check, mock_create):
+        mock_check.return_value = False
+        mock_create.return_value = -1
+        assert_that(self.app.add_subject("Fizyka", "Marcin Nowak")).is_equal_to(False)
 
