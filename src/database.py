@@ -85,3 +85,12 @@ class Database:
         if Database.delete_teacher() == -1:
             return False
         return True
+
+    def add_grade(self):
+        pass
+
+    @staticmethod
+    def add_grade_response():
+        if Database.add_grade() == -1:
+            return False
+        return True

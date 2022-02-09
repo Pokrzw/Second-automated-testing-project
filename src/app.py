@@ -67,3 +67,8 @@ class App:
             return "Teacher does not exists"
         Database.delete_teacher(id)
         return Database.delete_teacher_response()
+
+    @staticmethod
+    def add_grade(grade_id, student_id, teacher_id, subject_id, value):
+        Database.add_grade(grade_id, student_id, teacher_id, subject_id, value)
+        return
