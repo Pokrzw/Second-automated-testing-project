@@ -25,3 +25,6 @@ class Database:
         if Database.delete_student() == -1:
             return False
         return True
+
+    def create_przedmiot(self):
+        pass

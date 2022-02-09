@@ -27,3 +27,6 @@ class App:
         else:
             Database.delete_student(id)
             return Database.delete_student_response()
+
+    @staticmethod
+    def add_przedmiot(id):
