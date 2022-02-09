@@ -116,3 +116,35 @@ class Database:
         if Database.delete_grade() == -1:
             return False
         return True
+
+    def add_note(self):
+        pass
+
+    @staticmethod
+    def add_note_response():
+        if Database.add_note() == -1:
+            return False
+        return True
+
+    @staticmethod
+    def check_if_note_exists(id):
+        pass
+
+    def edit_note(self):
+        pass
+
+    @staticmethod
+    def edit_note_response():
+        if Database.edit_note() == -1:
+            return False
+        return True
+
+    def delete_note(self):
+        pass
+
+    @staticmethod
+    def delete_note_response():
+        if Database.delete_note() == -1:
+            return False
+        return True
+
