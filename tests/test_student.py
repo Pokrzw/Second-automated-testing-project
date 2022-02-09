@@ -100,3 +100,35 @@ class TestAppDeleteStudent(unittest.TestCase):
         mock_search.return_value = "Student object"
         mock_delete.return_value = 1
         assert_that(self.app.delete_student(1)).is_equal_to(True)
+
+class TestGetStudentGrades(unittest.TestCase):
+    def setUp(self) -> None:
+        self.app = App()
+    @patch('src.database.Database.search_student_by_id')
+    def test_get_students_grade_fail_nonexistent_student(self, mock_search):
+        mock_search.return_value = None
+        assert_that(self.app.show_student_grades(1)).is_equal_to("This student does not exist")
+
+    @patch('src.database.Database.get_student_instance')
+    @patch('src.database.Database.search_student_by_id')
+    def test_get_students_grade_success(self, mock_search, mock_instance):
+        mock_student = Mock(student_id=1, grades=[6,4,3])
+        mock_search.return_value = mock_student
+        mock_instance.return_value = mock_student
+        assert_that(self.app.show_student_grades(1)).is_equal_to([6,4,3])
+
+class TestGetStudentNotes(unittest.TestCase):
+    def setUp(self) -> None:
+        self.app = App()
+    @patch('src.database.Database.search_student_by_id')
+    def test_get_students_notes_fail_nonexistent_student(self, mock_search):
+        mock_search.return_value = None
+        assert_that(self.app.show_student_grades(1)).is_equal_to("This student does not exist")
+
+    @patch('src.database.Database.get_student_instance')
+    @patch('src.database.Database.search_student_by_id')
+    def test_get_students_grade_success(self, mock_search, mock_instance):
+        mock_student = Mock(student_id=1, notes=["Lorem","Ipsum"])
+        mock_search.return_value = mock_student
+        mock_instance.return_value = mock_student
+        assert_that(self.app.show_student_notes(1)).is_equal_to(["Lorem","Ipsum"])

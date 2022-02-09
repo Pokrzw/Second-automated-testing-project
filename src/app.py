@@ -119,4 +119,20 @@ class App:
             return "This student does not exist"
         student = Database.get_student_instance(student_id)
         return student.notes
-    
+
+    @staticmethod
+    def get_grades_given_by_teacher(teacher_id):
+        if Database.check_if_teacher_exists(teacher_id) is None:
+            return "This teacher does not exist"
+        resultsArray = []
+        for grade in Database.getAllGrades():
+            if grade.teacher_id == teacher_id:
+                resultsArray.append(grade)
+        return resultsArray
+
+    @staticmethod
+    def get_subjects_taught_by_teacher(teacher_id):
+        if Database.check_if_teacher_exists(teacher_id) is None:
+            return "This teacher does not exist"
+        teacher = Database.get_teacher_instance(teacher_id)
+        return teacher.taught_subjects

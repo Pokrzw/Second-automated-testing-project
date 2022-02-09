@@ -151,3 +151,9 @@ class Database:
             return False
         return True
 
+    def getAllGrades(self):
+        pass
+
+    @staticmethod
+    def get_teacher_instance(teacher_id):
+        pass

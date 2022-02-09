@@ -74,3 +74,39 @@ class TestAppDeleteTeacher(unittest.TestCase):
         mock_search.return_value = "Teacher object"
         mock_delete.return_value = -1
         assert_that(self.app.delete_teacher(1)).is_equal_to(False)
+
+class TestGetGradesGivenByTeacher(unittest.TestCase):
+    def setUp(self) -> None:
+        self.app = App()
+
+    @patch('src.database.Database.check_if_teacher_exists')
+    def test_grades_given_by_teacher_fail_no_id(self, mock_search):
+        mock_search.return_value = None
+        assert_that(self.app.get_grades_given_by_teacher(1)).is_equal_to("This teacher does not exist")
+
+    @patch('src.database.Database.getAllGrades')
+    @patch('src.database.Database.check_if_teacher_exists')
+    def test_grades_given_by_teacher_success(self, mock_search, mock_all_grades):
+        mock_grade1 = Mock(teacher_id=1, value=5)
+        mock_grade2 = Mock(teacher_id=4, value=3)
+        mock_grade3 = Mock(teacher_id=1, value=4)
+        mock_all_grades.return_value = [mock_grade1, mock_grade2, mock_grade3]
+        mock_search.return_value = 1
+        assert_that(self.app.get_grades_given_by_teacher(1)).is_equal_to([mock_grade1, mock_grade3])
+
+class TestGetSubjectsByTeacher(unittest.TestCase):
+    def setUp(self) -> None:
+        self.app = App()
+
+    @patch('src.database.Database.check_if_teacher_exists')
+    def test_grades_given_by_teacher_fail_no_id(self, mock_search):
+        mock_search.return_value = None
+        assert_that(self.app.get_subjects_taught_by_teacher(1)).is_equal_to("This teacher does not exist")
+
+    @patch('src.database.Database.get_teacher_instance')
+    @patch('src.database.Database.check_if_teacher_exists')
+    def test_grades_given_by_teacher_success(self, mock_search, mock_teacher_instance):
+        mock_teacher = Mock(teacher_id = 1, taught_subjects=["Przyroda","Matematyka"])
+        mock_search.return_value = mock_teacher
+        mock_teacher_instance.return_value = mock_teacher
+        assert_that(self.app.get_subjects_taught_by_teacher(1)).is_equal_to(["Przyroda","Matematyka"])
