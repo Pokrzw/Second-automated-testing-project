@@ -111,4 +111,4 @@ class App:
         if Database.search_student_by_id() is None:
             return "This student does not exist"
         student = Database.get_student_instance(student_id)
-        student
+        return student.grades
