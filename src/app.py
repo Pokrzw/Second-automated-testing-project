@@ -94,7 +94,7 @@ class App:
 
     @staticmethod
     def edit_note(note_id, student_id, teacher_id, subject_id, text):
-        if Database.check_if_grade_exists(note_id) is None:
+        if Database.check_if_note_exists(note_id) is None:
             return "This note does not exist"
         Database.edit_note(note_id, student_id, teacher_id, subject_id, text)
         return Database.edit_note_response()
