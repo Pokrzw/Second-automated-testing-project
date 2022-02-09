@@ -86,5 +86,10 @@ class TestAppDeleteStudent(unittest.TestCase):
         mock_search.return_value = None
         assert_that(self.app.delete_student).raises(ValueError).when_called_with("g")
 
+
     @patch('src.database.Database.search_student_by_id')
-    def test_delete_student_fail(self):
+    @patch('src.database.Database.delete_student')
+    def test_delete_student_fail(self, mock_delete, mock_search):
+        mock_search.return_value = "Student object"
+        mock_delete.return_value = -1
+        assert_that(self.app.delete_student(1)).is_equal_to(False)
