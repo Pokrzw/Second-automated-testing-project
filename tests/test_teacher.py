@@ -48,26 +48,26 @@ class TestAppEditTeacher(unittest.TestCase):
     @patch('src.database.Database.edit_teacher')
     @patch('src.database.Database.check_if_teacher_exists')
     def test_edit_student_success(self, mock_search, mock_edit_teacher):
-        mock_search.return_value = {"id":1, "name": "Jan", "surname":"Kowalski", "classCode":"5D"}
+        mock_search.return_value = {"id":1, "name": "Jan", "surname":"Kowalski"}
         mock_edit_teacher.return_value = 1
         assert_that(self.app.edit_teacher(1,"","")).is_equal_to(True)
 
 class TestAppDeleteTeacher(unittest.TestCase):
     def setUp(self) -> None:
         self.app = App()
-    @patch('src.database.Database.search_student_by_id')
-    def test_delete_student_fail_no_id(self, mock_search):
-        mock_search.return_value = None
-        assert_that(self.app.delete_student).raises(ValueError).when_called_with("g")
 
-#
-#     @patch('src.database.Database.search_student_by_id')
-#     @patch('src.database.Database.delete_student')
-#     def test_delete_student_fail(self, mock_delete, mock_search):
-#         mock_search.return_value = "Student object"
-#         mock_delete.return_value = -1
-#         assert_that(self.app.delete_student(1)).is_equal_to(False)
-#
+    @patch('src.database.Database.check_if_teacher_exists')
+    def test_delete_teacher_fail_no_id(self, mock_search):
+        mock_search.return_value = False
+        assert_that(self.app.delete_teacher(1)).is_equal_to("Teacher does not exists")
+
+    @patch('src.database.Database.check_if_teacher_exists')
+    @patch('src.database.Database.delete_teacher')
+    def test_delete_teacher_fail(self, mock_delete, mock_search):
+        mock_search.return_value = "Teacher object"
+        mock_delete.return_value = -1
+        assert_that(self.app.delete_teacher(1)).is_equal_to(False)
+
 #     @patch('src.database.Database.search_student_by_id')
 #     @patch('src.database.Database.delete_student')
 #     def test_delete_student_success(self, mock_delete, mock_search):
