@@ -93,3 +93,10 @@ class TestAppDeleteStudent(unittest.TestCase):
         mock_search.return_value = "Student object"
         mock_delete.return_value = -1
         assert_that(self.app.delete_student(1)).is_equal_to(False)
+
+    @patch('src.database.Database.search_student_by_id')
+    @patch('src.database.Database.delete_student')
+    def test_delete_student_success(self, mock_delete, mock_search):
+        mock_search.return_value = "Student object"
+        mock_delete.return_value = 1
+        assert_that(self.app.delete_student(1)).is_equal_to(True)
