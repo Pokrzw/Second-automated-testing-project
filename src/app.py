@@ -112,3 +112,11 @@ class App:
             return "This student does not exist"
         student = Database.get_student_instance(student_id)
         return student.grades
+
+    @staticmethod
+    def show_student_notes(student_id):
+        if Database.search_student_by_id() is None:
+            return "This student does not exist"
+        student = Database.get_student_instance(student_id)
+        return student.notes
+    
