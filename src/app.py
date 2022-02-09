@@ -48,3 +48,22 @@ class App:
             return "Subject does not exists"
         Database.delete_subject(name)
         return Database.delete_subject_response()
+
+    @staticmethod
+    def add_teacher(name, surname):
+        Database.add_teacher(name, surname)
+        return Database.create_subject_response()
+    #
+    # @staticmethod
+    # def edit_subject(name, teacher):
+    #     if Database.check_if_subject_exists(name) is False:
+    #         return "Subject does not exists"
+    #     Database.edit_subject(name, teacher)
+    #     return Database.edit_subject_response()
+    #
+    # @staticmethod
+    # def delete_subject(name):
+    #     if Database.check_if_subject_exists(name) is False:
+    #         return "Subject does not exists"
+    #     Database.delete_subject(name)
+    #     return Database.delete_subject_response()

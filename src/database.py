@@ -55,3 +55,15 @@ class Database:
         if Database.delete_subject() == -1:
             return False
         return True
+
+    def add_teacher(self, name, surname):
+        pass
+
+    @staticmethod
+    def add_teacher_response():
+        if Database.add_teacher() == -1:
+            return False
+        return True
+
+    def check_if_teacher_exists(self):
+        pass
