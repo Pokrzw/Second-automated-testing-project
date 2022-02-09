@@ -36,15 +36,15 @@ class TestAppCreateTeacher(unittest.TestCase):
         mock_adding_teacher.return_value = self.mock_results()
         assert_that(self.app.add_teacher("Jan", "Kowalski")).is_equal_to(False)
 
-# class TestAppEditStudent(unittest.TestCase):
-#     def setUp(self) -> None:
-#         self.app = App()
-#
-#     @patch('src.database.Database.search_student_by_id')
-#     def test_edit_student_fail(self, mock_search):
-#         mock_search.return_value = None
-#         assert_that(self.app.edit_student).raises(ValueError).when_called_with(5,'name','dur','3c')
-#
+class TestAppEditTeacher(unittest.TestCase):
+    def setUp(self) -> None:
+        self.app = App()
+
+    @patch('src.database.Database.check_if_teacher_exists')
+    def test_edit_student_fail(self, mock_search):
+        mock_search.return_value = False
+        assert_that(self.app.edit_teacher(1,"","")).is_equal_to("Teacher does not exists")
+
 #     @patch('src.database.Database.edit_student')
 #     @patch('src.database.Database.search_student_by_id')
 #     def test_edit_student_success(self, mock_search, mock_edit_student):
