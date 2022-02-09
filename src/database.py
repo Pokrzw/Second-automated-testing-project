@@ -1,13 +1,11 @@
 class Database:
     def __init__(self, database_name:str, password:str, port:4000):
         pass
-    def getAllStudents(self):
+    def add_student(self):
         pass
-    def getStudentGrades(self, student_id):
+    def edit_student(self, student_id, name, surname, classCode):
         pass
-    def getStudentNotes(self, student_id):
+    def search_student_by_id(self, student_id):
         pass
-    def createStudent(self,name:str, surname:str, classCode:str):
-        pass
-    def deleteStudent(self, student_id):
+    def delete_student(self, student_id):
         pass
