@@ -26,5 +26,13 @@ class Database:
             return False
         return True
 
-    def create_przedmiot(self):
+    def create_subject(self):
         pass
+
+    def check_if_subject_exists(self, subject):
+        pass
+
+    def create_subject_response(self):
+        if Database.create_subject()==-1:
+            return False
+        return True

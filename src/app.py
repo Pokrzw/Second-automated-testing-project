@@ -29,4 +29,9 @@ class App:
             return Database.delete_student_response()
 
     @staticmethod
-    def add_przedmiot(id):
+    def add_subject(name, teacher):
+        if Database.check_if_subject_exists(name) is True:
+            return "Subject already exists"
+        Database.create_subject(name, teacher)
+        return Database.create_subject_response()
+
