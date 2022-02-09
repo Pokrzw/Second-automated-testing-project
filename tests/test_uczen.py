@@ -51,8 +51,9 @@ class TestAppEditUczen(unittest.TestCase):
         mock_search.return_value = None
         assert_that(App.edit_student).raises(ValueError).when_called_with(5,'name','dur','3c')
 
+    @patch('src.database.Database.edit_student')
     @patch('src.database.Database.search_student_by_id')
-    def test_edit_student_fail(self, mock_search):
+    def test_edit_student_fail(self, mock_search, mock_edit_student):
         mock_search.return_value = {"id":1, "name": "Jan", "surname":"Kowalski", "classCode":"5D"}
-
-        assert_that(App.edit_student).raises(ValueError).when_called_with(5, 'name', 'dur', '3c')
+        mock_edit_student.return_value = {"id":1, "name": "Jan", "surname":"Kowalski", "classCode":"5A"}
+        assert_that(App.edit_student(1,"","","5A")).is_equal_to({"id":1, "name": "Jan", "surname":"Kowalski", "classCode":"5A"})
