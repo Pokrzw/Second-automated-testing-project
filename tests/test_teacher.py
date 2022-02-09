@@ -20,43 +20,22 @@ class TestCreateTeacher(unittest.TestCase):
         newTeacher = Teacher(name, surname)
         assert_that(newTeacher).is_instance_of(Teacher)
 
-# class TestAppConnectToDataabse(unittest.TestCase):
-#     def setUp(self) -> None:
-#         self.app = App()
-#         self.database = Database("mongo",'pwd',4000)
-#
-#     @patch("src.database.Database")
-#     def test_connect_to_database_fail(self, mock_database):
-#         mock_database.database_name = "mongo"
-#         mock_database.password = "pwd"
-#         mock_database.port = 4000
-#         assert_that(self.app.connect_to_database(mock_database, "1234")).is_equal_to("Couldn't connect to database - wrong password")
-#
-#     @patch("src.database.Database")
-#     def test_connect_to_database_success(self, mock_database):
-#         mock_database.database_name = "mongo"
-#         mock_database.password = "pwd"
-#         mock_database.port = 4000
-#         assert_that(self.app.connect_to_database(mock_database, "pwd")).is_equal_to(
-#             "Connected to mongo on port 4000")
-#
-#
-# class TestAppCreateStudent(unittest.TestCase):
-#     def setUp(self) -> None:
-#         self.mock_results = Mock(side_effect=[1,-1])
-#         self.app = App()
-#
-#     @patch("src.database.Database.add_student")
-#     def test_create_student_ok(self,mock_adding_student):
-#         mock_adding_student.return_value = self.mock_results()
-#         assert_that(self.app.create_student("Jan", "Kowalski", "3C")).is_equal_to("Dodano ucznia")
-#
-#     @patch("src.database.Database.add_student")
-#     def test_create_student_fail(self, mock_adding_student):
-#         self.mock_results()
-#         mock_adding_student.return_value = self.mock_results()
-#         assert_that(self.app.create_student("Jan", "9879", "xx")).is_equal_to("Nie dodano ucznia")
-#
+class TestAppCreateTeacher(unittest.TestCase):
+    def setUp(self) -> None:
+        self.mock_results = Mock(side_effect=[1,-1])
+        self.app = App()
+
+    @patch("src.database.Database.add_teacher")
+    def test_create_teacher_ok(self,mock_adding_teacher):
+        mock_adding_teacher.return_value = self.mock_results()
+        assert_that(self.app.add_teacher("Jan", "Kowalski")).is_equal_to(True)
+
+    @patch("src.database.Database.add_teacher")
+    def test_create_teacher_fail(self, mock_adding_teacher):
+        self.mock_results()
+        mock_adding_teacher.return_value = self.mock_results()
+        assert_that(self.app.add_teacher("Jan", "Kowalski")).is_equal_to(False)
+
 # class TestAppEditStudent(unittest.TestCase):
 #     def setUp(self) -> None:
 #         self.app = App()

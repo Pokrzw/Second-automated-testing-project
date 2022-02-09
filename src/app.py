@@ -52,7 +52,7 @@ class App:
     @staticmethod
     def add_teacher(name, surname):
         Database.add_teacher(name, surname)
-        return Database.create_subject_response()
+        return Database.add_teacher_response()
 
     @staticmethod
     def edit_teacher(id,name, surname):
