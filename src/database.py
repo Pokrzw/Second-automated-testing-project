@@ -142,6 +142,9 @@ class Database:
     def delete_note(self):
         pass
 
+    def get_student_instance(self):
+        pass
+
     @staticmethod
     def delete_note_response():
         if Database.delete_note() == -1:

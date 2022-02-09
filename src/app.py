@@ -105,3 +105,10 @@ class App:
             return "This note does not exist"
         Database.delete_note(note_id)
         return Database.delete_note_response()
+
+    @staticmethod
+    def show_student_grades(student_id):
+        if Database.search_student_by_id() is None:
+            return "This student does not exist"
+        student = Database.get_student_instance(student_id)
+        student
