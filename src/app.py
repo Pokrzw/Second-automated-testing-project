@@ -86,3 +86,22 @@ class App:
             return "This grade does not exist"
         Database.delete_grade(grade_id)
         return Database.delete_grade_response()
+
+    @staticmethod
+    def add_note(note_id, student_id, teacher_id, subject_id, text):
+        Database.add_grade(note_id, student_id, teacher_id, subject_id, text)
+        return Database.add_note_response()
+
+    @staticmethod
+    def edit_note(note_id, student_id, teacher_id, subject_id, text):
+        if Database.check_if_grade_exists(note_id) is None:
+            return "This note does not exist"
+        Database.edit_note(note_id, student_id, teacher_id, subject_id, text)
+        return Database.edit_note_response()
+
+    @staticmethod
+    def delete_note(note_id):
+        if Database.check_if_grade_exists(note_id) is None:
+            return "This note does not exist"
+        Database.delete_note(note_id)
+        return Database.delete_note_response()
