@@ -8,15 +8,17 @@ from assertpy import assert_that
 class TestAddGrade(unittest.TestCase):
     def setUp(self) -> None:
         self.app = App()
+    def test_grade_init(self):
+        assert_that(Grade(1,2,3,4,5)).is_instance_of(Grade)
     @patch("src.database.Database.add_grade")
     def test_add_grade_success(self, mock_add):
         mock_add.return_value = 1
-        assert_that(self.app.add_grade(1,1,1,1,4)).is_equal_to(True)
+        assert_that(self.app.add_grade(1,1,1,1,4)).is_true()
 
     @patch("src.database.Database.add_grade")
     def test_add_grade_fail(self, mock_add):
         mock_add.return_value = -1
-        assert_that(self.app.add_grade(10, 10, 10, 10, 4)).is_equal_to(False)
+        assert_that(self.app.add_grade(10, 10, 10, 10, 4)).is_false()
 
 class TestEditGrade(unittest.TestCase):
     def setUp(self) -> None:
