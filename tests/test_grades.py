@@ -61,3 +61,24 @@ class TestDeleteGrade(unittest.TestCase):
         mock_check.return_value = "grade instance"
         mock_delete.return_value = 1
         assert_that(self.app.delete_grade(1)).is_equal_to(True)
+
+class TestGetAvgGrade(unittest.TestCase):
+    def setUp(self) -> None:
+        self.app = App()
+
+    @patch('src.database.Database.get_student_instance')
+    @patch('src.database.Database.getAllGrades')
+    def test_get_avg_grade_success(self, mock_get_all_grades, mock_student_instance):
+        mock_grade1 = Mock(subject_id = 1, student_id = 3, value = 3)
+        mock_grade2 = Mock(subject_id=1, student_id=2, value=3)
+        mock_grade3 = Mock(subject_id=3, student_id=7, value=5)
+        mock_grade4 = Mock(subject_id=1, student_id=4, value=3)
+        mock_get_all_grades.return_value = [mock_grade1,mock_grade2,mock_grade3,mock_grade4]
+
+        mock_st1 = Mock(student_id = 3, classCode = "5B")
+        mock_st2 = Mock(student_id=2, classCode="5B")
+        mock_st3 = Mock(student_id=7, classCode="5B")
+        mock_st4 = Mock(student_id=4, classCode="2A")
+        mock_student_instance.side_effect = [mock_st1,mock_st2,mock_st3,mock_st4]
+
+        assert_that(self.app.get_avg_grade_of_class("5B",1)).is_equal_to(3.0)

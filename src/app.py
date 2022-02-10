@@ -136,3 +136,16 @@ class App:
             return "This teacher does not exist"
         teacher = Database.get_teacher_instance(teacher_id)
         return teacher.taught_subjects
+
+    @staticmethod
+    def get_avg_grade_of_class(class_code, subject_id):
+        gradeArray = Database.getAllGrades()
+        gradeSum = 0
+        gradeNumber = 0
+        for grade in gradeArray:
+            if grade.subject_id == subject_id:
+                student = Database.get_student_instance(grade.student_id)
+                if student.classCode == class_code:
+                    gradeSum += grade.value
+                    gradeNumber += 1
+        return gradeSum/gradeNumber
