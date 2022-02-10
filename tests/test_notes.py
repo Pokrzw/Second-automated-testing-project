@@ -1,9 +1,13 @@
 from unittest.mock import Mock, patch
 import unittest
+
+import hamcrest
+
 from src.app import App
 from src.database import Database
 from src.schemas.notes import Note
 from assertpy import assert_that
+from tests.matcher.matcher import eq_to_nonexistent_note
 
 class TestAddNote(unittest.TestCase):
     def setUp(self) -> None:
@@ -46,6 +50,7 @@ class TestDeleteNote(unittest.TestCase):
     @patch("src.database.Database.check_if_note_exists")
     def test_delete_note_fail_doesnt_exist(self, mock_check):
         mock_check.return_value = None
+        hamcrest.assert_that(self.app.delete_note(10), hamcrest.is_(eq_to_nonexistent_note()))
         assert_that(self.app.delete_note(10)).is_equal_to("This note does not exist")
 
     @patch("src.database.Database.delete_note")
