@@ -107,7 +107,7 @@ class TestGetSubjectsByTeacher(unittest.TestCase):
     @patch('src.database.Database.check_if_teacher_exists')
     def test_grades_given_by_teacher_success(self, mock_search, mock_teacher_instance):
         mock_teacher = create_autospec(Teacher)
-        # mock_teacher = Mock(teacher_id = 1, taught_subjects=["Przyroda","Matematyka"])
+        mock_teacher.taught_subjects=["Przyroda","Matematyka"]
         mock_search.return_value = mock_teacher
         mock_teacher_instance.return_value = mock_teacher
         assert_that(self.app.get_subjects_taught_by_teacher(1)).is_equal_to(["Przyroda","Matematyka"])
